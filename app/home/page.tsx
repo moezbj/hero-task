@@ -1,30 +1,21 @@
-"use client"
-import React, { useState } from "react";
+"use client";
+import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { signin } from "@/requests/auth";
-import { useMutation, useQuery, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Input from "@/components/ui/input";
-import { getClient } from "@/apollo";
+import { setUser } from "@/lib/cookie";
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
   password: z.string().min(2).max(50),
 });
 
-const GET_USERS = gql`
-  query GetUsers {
-    users {
-      name
-      email
-    }
-  }
-`;
-
-export default function ExampleV2() {
+function Page() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,10 +23,12 @@ export default function ExampleV2() {
       password: "",
     },
   });
-
-  const [call, state] = useMutation(signin);
-   const { loading, error, data } = useQuery(GET_USERS);
-  const handleSubmit = (variables: any) => {
+  const [call, state] = useMutation(signin, {
+    onCompleted: (data) => {
+      setUser(data);
+    },
+  });
+  const onSubmit = (variables: any) => {
     console.log("variables", variables);
     call({
       variables: {
@@ -69,7 +62,7 @@ export default function ExampleV2() {
                       </h4>
                     </div>
 
-                    <form>
+                    <form onSubmit={form.handleSubmit(onSubmit)}>
                       <p className="mb-4">Please register an account</p>
                       {/* <!--email input--> */}
                       <p>alice@prisma.io</p>
@@ -85,14 +78,14 @@ export default function ExampleV2() {
                       <div className="mb-12 pb-1 pt-1 text-center">
                         <Button
                           className="mb-3 inline-block w-full rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_rgba(0,0,0,0.2)] transition duration-150 ease-in-out hover:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)] focus:outline-none focus:ring-0 active:shadow-[0_8px_9px_-4px_rgba(0,0,0,0.1),0_4px_18px_0_rgba(0,0,0,0.2)]"
-                          type="button"
+                          type="submit"
                           style={{
                             background:
                               "linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)",
                           }}
-                          onClick={handleSubmit}
+                          //onClick={handleSubmit}
                         >
-                          Sign up
+                          Login
                         </Button>
 
                         {/* <!--Forgot password link--> */}
@@ -104,9 +97,13 @@ export default function ExampleV2() {
                         <p className="mb-0 mr-2">Have an account?</p>
                         <Button
                           type="button"
-                          className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+                          style={{
+                            background:
+                              "linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593)",
+                          }}
+                          className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out "
                         >
-                          Login
+                          Sign up
                         </Button>
                       </div>
                     </form>
@@ -141,3 +138,5 @@ export default function ExampleV2() {
     </section>
   );
 }
+
+export default Page;
