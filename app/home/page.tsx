@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -7,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { signin } from "@/requests/auth";
 import { useMutation, useQuery, gql } from "@apollo/client";
 import Input from "@/components/ui/input";
-import { getClient } from "@/lib/apollo";
+import { getClient } from "@/apollo";
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -23,7 +24,7 @@ const GET_USERS = gql`
   }
 `;
 
-export default async function ExampleV2() {
+export default function ExampleV2() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,9 +34,7 @@ export default async function ExampleV2() {
   });
 
   const [call, state] = useMutation(signin);
-  // const { loading, error, data } = useQuery(GET_USERS);
-  const { data } = await getClient().query({ query: GET_USERS });
-  console.log("data", data);
+   const { loading, error, data } = useQuery(GET_USERS);
   const handleSubmit = (variables: any) => {
     console.log("variables", variables);
     call({

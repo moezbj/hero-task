@@ -29,4 +29,4 @@ const makeClient = () =>
     link: link,
   });
 
-export const { getClient } =  registerApolloClient(()=> makeClient());
+export const {getClient } =  registerApolloClient(()=> makeClient());
