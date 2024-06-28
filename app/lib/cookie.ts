@@ -3,10 +3,17 @@ import { cookies } from "next/headers";
 import graphQLResult from "./graphQLResult";
 
 export interface UserData {
-  token: string;
+  token: {
+    tokenType: String;
+    accessToken: String;
+    refreshToken: String;
+    expiresIn: String;
+  };
   user: {
+    id: number;
     email: string;
-    name: string;
+    firstName: string;
+    lastName: string;
   };
 }
 
@@ -29,12 +36,12 @@ export async function getUser() {
   const user = await cookieStore.get("user");
   if (user) {
     const res = JSON.parse(JSON.stringify(user.value));
-    console.log("res", res);
-    return res;
+    if (res) {
+      return JSON.parse(res);
+    }
   }
 }
 export async function deleteUser() {
   const cookieStore = cookies();
   await cookieStore.delete("user");
-
 }

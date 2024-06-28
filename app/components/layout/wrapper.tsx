@@ -27,7 +27,7 @@ const Wrapper = ({ children, data }: WrapperProps) => {
     <div>
       <Header data={data} />
       <Drawer toggleDrawer={toggleDrawer} isOpen={isOpen}>
-        <main>{children}</main>
+        {children}
       </Drawer>
     </div>
   );

@@ -1,38 +1,40 @@
 "use client";
-import React, { useState } from "react";
-import {
-  DropdownMenuCheckboxItemProps,
-  DropdownMenuItem,
-} from "@radix-ui/react-dropdown-menu";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-type Checked = DropdownMenuCheckboxItemProps["checked"];
+import { UserData } from "@/lib/cookie";
+import Image from "next/image";
+import logo from "@/images/log.png";
+import { deleteUser } from "@/lib/cookie";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface headerData {
-  data: any;
+  data: UserData;
 }
-
+const destroyCookies = async () => {
+  await deleteUser();
+};
 const Header = ({ data }: headerData) => {
-  const [showPanel, setShowPanel] = useState<Checked>(false);
-  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
-  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
+  const deleteUse = destroyCookies;
+
+  console.log("data**", data);
 
   return (
     <header className="bg-grey-500 shadow-md">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="container mx-auto px-3 py-3 flex justify-between items-center">
         {/* Logo Section */}
-        <div className="text-2xl font-bold text-gray-800">MyLogo</div>
+        <div className="w-16">
+          <Image src={logo} alt="logo" />
+        </div>
 
         {/* Navigation Links */}
-        <nav className="hidden md:flex space-x-6">
+        {/*     <nav className="hidden md:flex space-x-6">
           <a href="/dashboard" className="text-gray-600 hover:text-gray-800">
             Home
           </a>
@@ -45,36 +47,26 @@ const Header = ({ data }: headerData) => {
           <a href="#" className="text-gray-600 hover:text-gray-800">
             Contact
           </a>
-        </nav>
+        </nav> */}
 
         {/* Profile Button */}
         <div className="flex items-center space-x-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">Profile</Button>
+              <Button variant="outline">
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <DropdownMenuLabel className="mx-2">{data.user.firstName} {data.user.lastName}</DropdownMenuLabel>
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+              <DropdownMenuLabel>Profile</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem
-                checked={showStatusBar}
-                onCheckedChange={setShowStatusBar}
-              >
-                Status Bar
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={showActivityBar}
-                onCheckedChange={setShowActivityBar}
-                disabled
-              >
-                Activity Bar
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-                checked={showPanel}
-                onCheckedChange={setShowPanel}
-              >
-                Panel
-              </DropdownMenuCheckboxItem>
+              <DropdownMenuLabel onClick={() => deleteUse()}>
+                Log out
+              </DropdownMenuLabel>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

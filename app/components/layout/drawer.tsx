@@ -9,11 +9,11 @@ interface DrawerProps {
 
 const Drawer = ({ isOpen, toggleDrawer, children }: DrawerProps) => {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen ">
       <div
         className={`transition-all duration-300 ${
           isOpen ? "w-72" : "w-14"
-        } bg-gray-800 text-white h-full`}
+        } bg-gray-500 text-white h-full`}
       >
         <button
           className="p-2 bg-blue-500 hover:bg-blue-700 transition-all duration-300"
@@ -25,7 +25,7 @@ const Drawer = ({ isOpen, toggleDrawer, children }: DrawerProps) => {
           <p>Drawer Content</p>
         </div>
       </div>
-      <div className="flex-grow p-4">
+      <div className="flex-grow p-4 bg-slate-800">
         {children}
       </div>
     </div>

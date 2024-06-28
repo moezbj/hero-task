@@ -1,10 +1,8 @@
 import { ApolloWrapper } from "./ApolloWrapper";
 import Wrapper from "./components/layout/wrapper";
 import AuthPage from "./home/page";
-import "./globals.css";
 import { getUser } from "./lib/cookie";
-import Navigate from "./lib/navigate";
-
+import "./globals.css";
 const getData = async () => {
   const getUserInfo = await getUser();
   return getUserInfo;
