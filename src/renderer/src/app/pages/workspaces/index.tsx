@@ -23,7 +23,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
+  DialogClose
 } from '../../components/ui/dialog'
 import { LIST_WORKSPACES, CREATE_WORKSPACE } from '../../../requests/workspace/workspaceRequests'
 
@@ -68,14 +69,12 @@ const Page = (): JSX.Element => {
       <div className="flex justify-between px-8">
         <p className="text-grey-200 font-bold text-2xl">All workspaces</p>
         <Dialog open={open}>
-          <DialogTrigger asChild>
-            <Button variant="outline" onClick={() => setOpen(true)}>
-              Add workspace
-            </Button>
+          <DialogTrigger asChild onClick={() => setOpen(true)}>
+            <Button>Add workspace</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle className="text-grey-200">Create project</DialogTitle>
+              <DialogTitle className="text-grey-200">Create workspace</DialogTitle>
               <DialogDescription className="text-grey-200">
                 Make changes to your profile here. Click save when you&apos;re done.
               </DialogDescription>
@@ -98,6 +97,9 @@ const Page = (): JSX.Element => {
                 />
               </div>
               <DialogFooter>
+                <DialogClose asChild onClick={() => setOpen(false)}>
+                  <Button variant="secondary">close</Button>
+                </DialogClose>
                 <Button type="submit" className="text-grey-200">
                   Save changes
                 </Button>
