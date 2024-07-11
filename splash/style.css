@@ -1,0 +1,43 @@
+* {
+  font-family: 'Open Sans', sans-serif;
+}
+.splash-screen-1 {
+  background: transparent;
+}
+.splash-screen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.splash-screen .logo {
+  width: 100%;
+}
+
+.logo img {
+  width: 100%;
+  display: block;
+  margin: auto;
+}
+
+.splash-screen .version {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  font-size: 10px;
+}
+
+.splash-screen .copyright {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 10px;
+  font-size: 10px;
+}
+
+.text-white {
+  color: white;
+}
