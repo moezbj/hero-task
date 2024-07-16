@@ -1,47 +1,53 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Navigate, useSearchParams } from 'react-router-dom'
-
+import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import { Button } from '../../../components/ui/button'
 import Input from '../../../components/ui/input'
-import { signin } from '../../../../requests/auth'
-import useAuth from '../../../../hooks/useAuth'
+import { forgotPassword, validToken } from '../../../../requests/auth'
 import useUser from '../../../../hooks/useUser'
 import { Link } from 'react-router-dom'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import AuthWrapper from '../../../components/layout/AuthWrapper'
+import { useEffect } from 'react'
 
 const formSchema = z.object({
-  email: z.string().min(2).max(50),
-  password: z.string().min(2).max(50)
+  password: z.string().min(2).max(50),
+  confirm: z.string().min(2).max(50)
 })
 
 function Login(): JSX.Element {
   const [params] = useSearchParams()
   const user = useUser()
+  const { id, token } = useParams()
 
-  const [LoginCall] = useAuth({
-    mutation: signin,
-    options: {
-      onError: (e) => {
-        console.log(e)
-      }
-    }
-  })
+  const [resetCall] = useMutation(forgotPassword)
+  const [callValidationToken] = useLazyQuery(validToken)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: 'alice@prisma.io',
-      password: 'myPassword42'
+      password: '',
+      confirm: ''
     }
   })
 
-  const onSubmit = (variables: { email: string; password: string }): void => {
-    LoginCall({
+  const onSubmit = (variables: { confirm: string; password: string }): void => {
+    resetCall({
       variables
     })
   }
+  useEffect(() => {
+    if (id && token) {
+      callValidationToken({
+        variables: {
+          tokenType: 'FORGET',
+          user: id,
+          token: token
+        }
+      })
+    }
+  }, [callValidationToken, id, token])
 
   if (user) {
     return <Navigate to={params.get('from') || '/'} replace />
@@ -49,15 +55,20 @@ function Login(): JSX.Element {
   return (
     <AuthWrapper>
       <div>
-        <h5 className="mb-12 mt-1 pb-1 text-xl semibold text-grey-250">Login</h5>
+        <h5 className="mb-12 mt-1 pb-1 text-xl semibold text-grey-250">Reset password</h5>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-y-2 grid-cols-1">
           <Input
-            label="Email"
-            value="alice@prisma.io"
-            {...form.register('email')}
+            label="Password"
+            value=""
+            {...form.register('password')}
             className="text-black"
           ></Input>
-          <Input label="Password" value="myPassword42" {...form.register('password')}></Input>
+          <Input
+            label="Confirm Password"
+            value=""
+            {...form.register('confirm')}
+            className="text-black"
+          ></Input>
 
           <div className="mb-12 pb-1 pt-1 text-center">
             <Button
@@ -65,12 +76,8 @@ function Login(): JSX.Element {
               type="submit"
               variant="default"
             >
-              Login
+              Send
             </Button>
-
-            <Link to="/forgot-password" className="text-grey-250">
-              Forgot password ?
-            </Link>
           </div>
 
           <div className="flex items-center justify-between pb-6">

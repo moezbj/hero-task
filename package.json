@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
+  "protocols": {
+    "schemes": [
+      {
+        "name": "myapp",
+        "role": "Editor"
+      }
+    ]
+  },
   "author": "example.com",
   "type": "module",
   "homepage": "https://electron-vite.org",
