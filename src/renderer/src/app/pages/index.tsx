@@ -12,7 +12,7 @@ import Register from './public/register'
 import Home from './home'
 import ResetPassword from './public/resetPassword'
 import ForgotPassword from './public/forgotPassword'
-// import { useNavigate } from 'react-router-dom'
+//import { useNavigate } from 'react-router-dom'
 const { ipcRenderer } = require('electron')
 
 const Pages = (): JSX.Element => {

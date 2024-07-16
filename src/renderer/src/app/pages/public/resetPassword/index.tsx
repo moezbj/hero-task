@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Navigate, useParams, useSearchParams } from 'react-router-dom'
+import { Navigate, useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/ui/button'
 import Input from '../../../components/ui/input'
-import { forgotPassword, validToken } from '../../../../requests/auth'
+import { resetPassword, validToken } from '../../../../requests/auth'
 import useUser from '../../../../hooks/useUser'
 import { Link } from 'react-router-dom'
 import { useLazyQuery, useMutation } from '@apollo/client'
@@ -17,12 +17,24 @@ const formSchema = z.object({
 })
 
 function Login(): JSX.Element {
+  const navigate = useNavigate()
   const [params] = useSearchParams()
   const user = useUser()
   const { id, token } = useParams()
 
-  const [resetCall] = useMutation(forgotPassword)
-  const [callValidationToken] = useLazyQuery(validToken)
+  const [resetCall] = useMutation(resetPassword)
+  const [callValidationToken, { data }] = useLazyQuery(validToken)
+  useEffect(() => {
+    if (id && token) {
+      callValidationToken({
+        variables: {
+          tokenType: 'FORGET',
+          userId: id,
+          token: token
+        }
+      })
+    }
+  }, [callValidationToken, id, token])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -34,20 +46,15 @@ function Login(): JSX.Element {
 
   const onSubmit = (variables: { confirm: string; password: string }): void => {
     resetCall({
-      variables
+      variables: {
+        ...variables,
+        token: data.validToken.token.accessToken
+      },
+      onCompleted: () => {
+        navigate('/login')
+      }
     })
   }
-  useEffect(() => {
-    if (id && token) {
-      callValidationToken({
-        variables: {
-          tokenType: 'FORGET',
-          user: id,
-          token: token
-        }
-      })
-    }
-  }, [callValidationToken, id, token])
 
   if (user) {
     return <Navigate to={params.get('from') || '/'} replace />
@@ -57,15 +64,9 @@ function Login(): JSX.Element {
       <div>
         <h5 className="mb-12 mt-1 pb-1 text-xl semibold text-grey-250">Reset password</h5>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-y-2 grid-cols-1">
-          <Input
-            label="Password"
-            value=""
-            {...form.register('password')}
-            className="text-black"
-          ></Input>
+          <Input label="Password" {...form.register('password')} className="text-black"></Input>
           <Input
             label="Confirm Password"
-            value=""
             {...form.register('confirm')}
             className="text-black"
           ></Input>

@@ -51,13 +51,10 @@ function Login(): JSX.Element {
       <div>
         <h5 className="mb-12 mt-1 pb-1 text-xl semibold text-grey-250">Login</h5>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-y-2 grid-cols-1">
-          <Input
-            label="Email"
-            value="alice@prisma.io"
-            {...form.register('email')}
-            className="text-black"
-          ></Input>
-          <Input label="Password" value="myPassword42" {...form.register('password')}></Input>
+          <p>alice@prisma.io</p>
+          <Input label="Email" {...form.register('email')} className="text-black"></Input>
+          <p>myPassword42</p>
+          <Input label="Password" {...form.register('password')}></Input>
 
           <div className="mb-12 pb-1 pt-1 text-center">
             <Button

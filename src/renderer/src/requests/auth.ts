@@ -77,8 +77,8 @@ const forgotPassword = gql`
   }
 `
 const resetPassword = gql`
-  mutation resetPassword($password: String!, $confirm: String!) {
-    resetPassword(email: $email, confirm: $confirm)
+  mutation resetPassword($password: String!, $confirm: String!, $token: String!) {
+    resetPassword(password: $password, confirm: $confirm, token: $token)
   }
 `
 
@@ -89,7 +89,14 @@ const logout = gql`
 `
 const validToken = gql`
   query validToken($tokenType: String!, $token: String!, $userId: String!) {
-    validToken(tokenType: $tokenType, token: $token, userId: $userId)
+    validToken(tokenType: $tokenType, token: $token, userId: $userId) {
+      user {
+        id
+      }
+      token {
+        accessToken
+      }
+    }
   }
 `
 
