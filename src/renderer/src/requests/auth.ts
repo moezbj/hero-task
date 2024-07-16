@@ -71,4 +71,10 @@ const refreshToken = gql`
   }
 `
 
-export { signin, signup, profile, refreshToken }
+const logout = gql`
+  mutation logout($token: String!) {
+    logout(token: $token)
+  }
+`
+
+export { signin, signup, profile, refreshToken, logout }

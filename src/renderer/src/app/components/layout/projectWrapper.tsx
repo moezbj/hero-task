@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from './header'
+import Drawer from './drawer'
 
 interface WrapperProps {
   children: React.ReactNode
@@ -7,10 +7,9 @@ interface WrapperProps {
 
 const Wrapper = ({ children }: WrapperProps): JSX.Element => {
   return (
-    <div className="h-screen flex flex-col flex-1">
-      <Header />
-      <main className="h-full">{children}</main>
-    </div>
+    <Drawer>
+      <main>{children}</main>
+    </Drawer>
   )
 }
 

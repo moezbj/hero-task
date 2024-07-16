@@ -1,20 +1,20 @@
-import Wrapper from '../../components/layout/wrapper'
+import ProjectWrapper from '../../components/layout/projectWrapper'
 import { Route, Routes } from 'react-router-dom'
 
 import { Protected } from '../../components/layout/Protected'
 import { ROLE } from '../../../lib/role'
-import Workspace from '../workspaces'
+import Backlog from './backlog'
+import Board from './board'
 
 function RoutesPage(): JSX.Element {
   return (
     <Protected roles={[ROLE.ADMIN]}>
-      <Wrapper>
+      <ProjectWrapper>
         <Routes>
-          <Route path="*" element={<Workspace />} />
-          <Route path="/profile" />
-          <Route path="/settings" />
+          <Route path="/" element={<Backlog />} />
+          <Route path="/Board" element={<Board />} />
         </Routes>
-      </Wrapper>
+      </ProjectWrapper>
     </Protected>
   )
 }

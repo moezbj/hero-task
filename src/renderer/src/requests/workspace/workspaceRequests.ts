@@ -3,9 +3,19 @@ import { gql } from 'graphql-tag'
 const LIST_WORKSPACES = gql`
   query listWorkspaces {
     listWorkspaces {
+      id
       name
       description
-      admin
+      adminId
+      collaborators
+      projects {
+        title
+        participant {
+          id
+          firstName
+          lastName
+        }
+      }
     }
   }
 `
@@ -15,6 +25,7 @@ const CREATE_WORKSPACE = gql`
     createWorkspace(name: $name, description: $description) {
       name
       description
+      admin
     }
   }
 `

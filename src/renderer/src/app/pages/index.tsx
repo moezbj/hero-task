@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 
 import AuthProvider from '../../providers/AuthProvider'
 import LanguageProvider from '../..//providers/LanguageProvider'
@@ -14,11 +14,13 @@ import Home from './home'
 /* import ForgotPassword from './public/ForgotPassword' */
 
 const Pages = (): JSX.Element => {
+  const location = useLocation()
+  console.log('useLocation', location)
   return (
     <AuthProvider>
       <LanguageProvider>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="*" element={<Home />} />
           <Route path="/login" element={<Login />} />
           {/*      <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:id/:token" element={<ResetPassword />} /> */}

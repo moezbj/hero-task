@@ -19,6 +19,7 @@ const CREATE_PROJECT = gql`
 const LIST_PROJECTS = gql`
   query listProjects {
     listProjects {
+      id
       title
       description
       owner
