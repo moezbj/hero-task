@@ -1,5 +1,4 @@
 import Input from '../../components/ui/input'
-import { Label } from '../../components/ui/label'
 import { z } from 'zod'
 import { Suspense, useContext, useState } from 'react'
 import { useMutation, useQuery } from '@apollo/client'
@@ -17,15 +16,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { WorkSpaceType } from '../../../requests/workspace/workspaceType'
 import { Button } from '../../components/ui/button'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose
-} from '../../components/ui/dialog'
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from '../../components/ui/sheet'
 import { LIST_WORKSPACES, CREATE_WORKSPACE } from '../../../requests/workspace/workspaceRequests'
 import { ProjectType } from '@requests/project/projectTypes'
 import { AuthContext } from '../../../providers/AuthProvider'
@@ -73,47 +70,38 @@ const Page = (): JSX.Element => {
       <div className="my-6 mx-12 ">
         <div className="flex justify-between py-4">
           <h1 className="text-grey-200 font-bold text-2xl">All workspaces</h1>
-          <Dialog open={open}>
-            <DialogTrigger asChild onClick={() => setOpen(true)}>
-              <Button>Add workspace</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle className="text-grey-200">Create workspace</DialogTitle>
-                <DialogDescription className="text-grey-200">
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="default" onClick={() => setOpen(true)}>
+                Add workspace
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <SheetHeader>
+                <SheetTitle>Add workspace</SheetTitle>
+                <SheetDescription>
                   Make changes to your profile here. Click save when you&apos;re done.
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right text-grey-200">
-                    name
-                  </Label>
-                  <Input label="name" {...form.register('name')} className="col-span-3" />
+                </SheetDescription>
+              </SheetHeader>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="flex flex-col">
+                  <div className="flex flex-col  mb-4">
+                    <Input label="name" {...form.register('name')} className="w-full" />
+                  </div>
+                  <div className="flex flex-col mb-4">
+                    <Input
+                      label="description"
+                      {...form.register('description')}
+                      className="w-full mb-4"
+                    />{' '}
+                  </div>
+                  <Button type="submit">Create</Button>
                 </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right text-grey-200">
-                    description
-                  </Label>
-                  <Input
-                    label="description"
-                    {...form.register('description')}
-                    className="col-span-3"
-                  />
-                </div>
-                <DialogFooter>
-                  <DialogClose asChild onClick={() => setOpen(false)}>
-                    <Button variant="secondary">close</Button>
-                  </DialogClose>
-                  <Button type="submit" className="text-grey-200">
-                    Save changes
-                  </Button>
-                </DialogFooter>
               </form>
-            </DialogContent>
-          </Dialog>
+            </SheetContent>
+          </Sheet>
         </div>
-        <div className="mt-2">
+        <div className="mt-8">
           <h2 className="text-grey-200 font-bold text-2xl">My workspaces</h2>
           <Accordion type="single" collapsible className="w-full">
             {data?.listWorkspaces
@@ -133,7 +121,7 @@ const Page = (): JSX.Element => {
                           <div>
                             <h4>{project.title}</h4>
                             <p>{project.description}</p>
-                            <p>Participants: {project.participant.length}</p>
+                            <p>Participants: {project.participants.length}</p>
                           </div>
                         </Link>
                       ))}
@@ -144,7 +132,7 @@ const Page = (): JSX.Element => {
           </Accordion>
         </div>
 
-        <div className="mt-2">
+        <div className="mt-8">
           <h2 className="text-grey-200 font-bold text-2xl">Workspaces working on</h2>
           <Accordion type="single" collapsible className="w-full">
             {data?.listWorkspaces
@@ -159,7 +147,7 @@ const Page = (): JSX.Element => {
                         <div key={project.title}>
                           <h4>{project.title}</h4>
                           <p>{project.description}</p>
-                          <p>Participants: {project.participant.length}</p>
+                          <p>Participants: {project.participants.length}</p>
                         </div>
                       ))}
                     </div>

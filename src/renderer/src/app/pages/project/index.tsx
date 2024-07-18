@@ -5,14 +5,16 @@ import { Protected } from '../../components/layout/Protected'
 import { ROLE } from '../../../lib/role'
 import Backlog from './backlog'
 import Board from './board'
+import Inbox from './inbox'
 
 function RoutesPage(): JSX.Element {
   return (
     <Protected roles={[ROLE.ADMIN]}>
       <ProjectWrapper>
         <Routes>
-          <Route path="/" element={<Backlog />} />
-          <Route path="/Board" element={<Board />} />
+          <Route index path="/backlog" element={<Backlog />} />
+          <Route path="/board" element={<Board />} />
+          <Route path="/inbox" element={<Inbox />} />
         </Routes>
       </ProjectWrapper>
     </Protected>

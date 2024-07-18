@@ -10,7 +10,7 @@ const LIST_WORKSPACES = gql`
       collaborators
       projects {
         title
-        participant {
+        participants {
           id
           firstName
           lastName
@@ -25,7 +25,7 @@ const CREATE_WORKSPACE = gql`
     createWorkspace(name: $name, description: $description) {
       name
       description
-      admin
+      adminId
     }
   }
 `

@@ -116,7 +116,7 @@ const Page = (): JSX.Element => {
         </div>
         <div className="mt-2 container grid grid-cols-12">
           {data?.listProjects?.map((project: ProjectType) => (
-            <Link className="col-span-3" key={project.title} to={`project/${project.id}`}>
+            <Link className="col-span-3" key={project.title} to={`project/${project.id}/backlog`}>
               <Card>
                 <CardHeader>
                   <CardTitle>{project.title}</CardTitle>

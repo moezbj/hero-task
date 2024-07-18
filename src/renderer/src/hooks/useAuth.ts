@@ -21,11 +21,7 @@ function useAuth({ mutation, options = {}, stayConnected = true }: any): any {
   const [call, state] = useMutation(mutation, {
     ...options,
     onCompleted: (data) => {
-      console.log('here')
-
       const result = graphQLResult(data) as unknown as Auth
-      console.log('hrer ...2')
-
       setToken(result.token)
       persistUser(result)
       setUser(result.user)

@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import AuthProvider from '../../providers/AuthProvider'
 import LanguageProvider from '../..//providers/LanguageProvider'
@@ -12,14 +12,9 @@ import Register from './public/register'
 import Home from './home'
 import ResetPassword from './public/resetPassword'
 import ForgotPassword from './public/forgotPassword'
-//import { useNavigate } from 'react-router-dom'
 const { ipcRenderer } = require('electron')
 
 const Pages = (): JSX.Element => {
-  const location = useLocation()
-  console.log('useLocation', location)
-  //const navigate = useNavigate()
-
   ipcRenderer.on('navigate', (event, url) => {
     window.location.href = url
   })
